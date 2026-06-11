@@ -30,7 +30,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "diagnostics", label: "Diagnostics", icon: <Activity className="h-5 w-5" /> },
   { id: "bloom", label: "Bloom Filter", icon: <Cpu className="h-5 w-5" /> },
   { id: "auditor", label: "App Auditor", icon: <FileCode2 className="h-5 w-5" /> },
-  { id: "janitor", label: "Account Janitor", icon: <Smartphone className="h-5 w-5" /> },
+  { id: "janitor", label: "Janitor", icon: <Smartphone className="h-5 w-5" /> },
   { id: "dns", label: "Private DNS", icon: <Network className="h-5 w-5" /> }
 ];
 

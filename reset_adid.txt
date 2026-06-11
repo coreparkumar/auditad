@@ -1,0 +1,78 @@
+The code to perform the "Reset Advertising ID" functionality is located in the following files:
+
+1. Business Logic / ViewModel
+In 
+AuditViewModel.kt
+, the application manages the advertising ID state and handles the reset logic:
+
+kotlin
+
+
+    // --- 4. Account Janitor ---
+    private val _advertisingId = MutableStateFlow("f71a0e10-90fb-40db-91b5-fa6b216ff2bc")
+    val advertisingId: StateFlow<String> = _advertisingId.asStateFlow()
+    private val _isResettingAdId = MutableStateFlow(false)
+    val isResettingAdId: StateFlow<Boolean> = _isResettingAdId.asStateFlow()
+    fun resetAdvertisingId() {
+        _isResettingAdId.value = true
+        viewModelScope.launch {
+            delay(1200) // sleek cinematic audit simulation
+            _advertisingId.value = UUID.randomUUID().toString()
+            _isResettingAdId.value = false
+        }
+    }
+2. User Interface / Composable Screen
+In 
+AccountJanitorScreen.kt
+, the button triggers the reset action and displays the simulated progress and the updated ID:
+
+kotlin
+
+
+        // --- Advertising ID Reset Panel ---
+        item {
+            AuditCard {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    // ... Panel Header & Description ...
+                    // Display UUID ad ID
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF0F172A))
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(text = "CURRENT GAID LABELLER ID:", color = TextSecondary, fontSize = 9.sp, fontFamily = FontFamily.Monospace)
+                            Text(
+                                text = adId,
+                                color = if (isResettingAdId) WarningOrange else ShieldGreen,
+                                fontSize = 11.sp,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.ExtraBold,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isResettingAdId) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                CircularProgressIndicator(color = BrandGoogle, modifier = Modifier.size(20.dp))
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Generating fresh anonymous system token...", color = TextSecondary, fontSize = 12.sp)
+                            }
+                        } else {
+                            PrimarySecurityButton(
+                                text = "RESET ADVERTISING ID",
+                                onClick = { viewModel.resetAdvertisingId() },
+                                containerColor = BrandGoogle,
+                                modifier = Modifier.fillMaxWidth(),
+                                icon = Icons.Default.Refresh
+                            )
+                        }
+                    }
+                }
+            }
+        }

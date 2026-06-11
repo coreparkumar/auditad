@@ -71,6 +71,8 @@ export default function JanitorWorkspace() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [lastAdReset, setLastAdReset] = useState<number | null>(null);
   const [showResetReminder, setShowResetReminder] = useState(false);
+  const [advertisingId, setAdvertisingId] = useState<string>("f71a0e10-90fb-40db-91b5-fa6b216ff2bc");
+  const [isResettingAdId, setIsResettingAdId] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("auditad_last_ad_reset");
@@ -95,6 +97,23 @@ export default function JanitorWorkspace() {
     setLastAdReset(now);
     setShowResetReminder(false);
     setIsOverlaySimulated(false);
+  };
+
+  const generateUUID = (): string => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      const r = (Math.random() * 16) | 0;
+      const v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
+  const handleResetAdvertisingId = () => {
+    setIsResettingAdId(true);
+    setTimeout(() => {
+      setAdvertisingId(generateUUID());
+      setIsResettingAdId(false);
+      handleRecordReset();
+    }, 1200);
   };
 
   const handleLaunchTask = (task: JanitorTask) => {
@@ -253,11 +272,43 @@ export default function JanitorWorkspace() {
         </div>
       )}
 
+      {/* Advertising ID Reset Panel */}
+      <div className="bg-gradient-to-br from-slate-900/30 to-slate-800/20 dark:from-slate-900 dark:to-slate-950 border border-slate-700/40 dark:border-slate-800 rounded-2xl p-6 shadow-lg">
+        <div className="space-y-4">
+          <div>
+            <p className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Current GAID Labeller ID</p>
+            <div className="bg-slate-950/60 dark:bg-slate-900 rounded-lg border border-slate-700/50 dark:border-slate-800 p-4 font-mono text-sm">
+              <p className={`${isResettingAdId ? "text-amber-400" : "text-emerald-400"} font-mono font-bold tracking-wide break-all`}>
+                {advertisingId}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            {isResettingAdId ? (
+              <div className="flex items-center justify-center gap-3 py-3">
+                <div className="animate-spin">
+                  <div className="h-5 w-5 border-2 border-indigo-600 border-t-transparent rounded-full"></div>
+                </div>
+                <p className="text-sm text-slate-400 dark:text-slate-300 font-medium">Generating fresh anonymous system token...</p>
+              </div>
+            ) : (
+              <button
+                onClick={handleResetAdvertisingId}
+                className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-500/30 transition-all active:scale-95 uppercase tracking-tighter flex items-center justify-center gap-2"
+              >
+                <span>Reset Advertising ID</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Title */}
       <div>
         <h3 className="text-xl font-extrabold text-slate-850 dark:text-slate-100 flex items-center gap-3">
           <Smartphone className="h-6 w-6 text-indigo-500" />
-          Account Janitor Module
+          Janitor Module
         </h3>
         <p className="text-base text-slate-500 leading-relaxed max-w-2xl font-medium mt-2">
           Provides explicit routing URIs directly to Android frameworks. Since server-side account blocks require active user login vectors to confirm, we project an transparent Floating System Overlay over the host browser.
