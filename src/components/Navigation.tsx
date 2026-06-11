@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   ShieldAlert,
   Sun,
-  Moon
+  Moon,
+  Download
 } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
@@ -84,6 +85,24 @@ export default function Navigation({
         </nav>
 
         <div className="p-4 space-y-6">
+          <a
+            href="https://play.google.com/apps/internaltest/4700902630438787188"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-[1.25rem] border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50 dark:bg-indigo-950/30 p-4 shadow-sm transition hover:bg-indigo-100 dark:hover:bg-indigo-900/40"
+          >
+            <div className="flex items-start gap-3">
+              <div className="rounded-xl bg-indigo-600 p-2 text-white shadow-sm">
+                <Download className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-300">Android Test</p>
+                <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">Download & test the full app</h2>
+                <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-300">Open the Play internal test page for the Android build.</p>
+              </div>
+            </div>
+          </a>
+
           <div className="p-5 rounded-[2rem] bg-slate-50 dark:bg-slate-900/50 border border-app-border-light dark:border-app-border-dark shadow-inner">
             <div className="flex items-center justify-between mb-3 px-1">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Shield Core</span>
@@ -115,6 +134,20 @@ export default function Navigation({
 
       {/* Mobile Slider-Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-app-bg-dark/95 backdrop-blur-lg border-t border-app-border-light dark:border-app-border-dark px-2 pb-safe-offset-2 pt-2 shadow-2xl overflow-x-auto no-scrollbar snap-x snap-mandatory">
+        <div className="mb-2 px-2">
+          <a
+            href="https://play.google.com/apps/internaltest/4700902630438787188"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between rounded-2xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50 dark:bg-indigo-950/30 px-3 py-2 text-left"
+          >
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-300">Android Test</p>
+              <p className="text-[11px] font-semibold text-slate-700 dark:text-slate-100">Download the full app</p>
+            </div>
+            <Download className="h-4 w-4 text-indigo-600 dark:text-indigo-300" />
+          </a>
+        </div>
         <div className="flex justify-between items-center min-w-full px-2">
           {NAV_ITEMS.map((item) => (
             <button

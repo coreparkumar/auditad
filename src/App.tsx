@@ -7,7 +7,8 @@ import React, { useState, useEffect } from "react";
 import {
   ShieldAlert,
   Info,
-  BatteryCharging
+  BatteryCharging,
+  Download
 } from "lucide-react";
 import Navigation, { TabId } from "./components/Navigation";
 import DashboardLayout from "./components/DashboardLayout";
@@ -87,6 +88,27 @@ export default function App() {
     >
       {activeTab === "diagnostics" && (
         <div className="space-y-8">
+          <a
+            href="https://play.google.com/apps/internaltest/4700902630438787188"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-[1.5rem] border border-indigo-200 dark:border-indigo-900/60 bg-gradient-to-r from-indigo-50 via-white to-slate-50 dark:from-indigo-950/30 dark:via-slate-950 dark:to-slate-950 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-start gap-3">
+                <div className="rounded-2xl bg-indigo-600 p-3 text-white shadow-sm">
+                  <Download className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-300">Android Test Build</p>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-slate-100">Download and test the full Android app</h3>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Open the Play internal test page to install the complete Android version directly on your device.</p>
+                </div>
+              </div>
+              <span className="inline-flex items-center rounded-full bg-indigo-600 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-white shadow-sm">Open Test Link</span>
+            </div>
+          </a>
+
           <DashboardSummary
             adsBlocked={adsBlocked}
             trackersBlocked={trackersBlocked}
