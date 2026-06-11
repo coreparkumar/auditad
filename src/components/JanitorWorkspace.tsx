@@ -42,7 +42,7 @@ const JANITOR_TASKS: JanitorTask[] = [
     title: "Meta Corporate Tracking Rights",
     category: "Meta",
     description: "Facebook cross-app profiles track devices using embedded Software Development Kits (SDKs) in random utility and gaming apps.",
-    canonicalUrl: "https://accountscenter.facebook.com/ads/preferences",
+    canonicalUrl: "https://accountscenter.meta.com/ads_interests",
     actionVector: "Revoke corporate profiling tags.",
     steps: [
       "Wait for Meta Accounts Center to load inside browser.",
