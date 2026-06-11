@@ -1,0 +1,6 @@
+{
+  "name": "AuditAd",
+  "description": "Local Threat Analytics, Enterprise DNS Optimizer, and Privacy Audit Utility Dashboard",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
