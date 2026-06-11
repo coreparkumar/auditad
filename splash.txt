@@ -1,0 +1,64 @@
+<!-- Insert this block immediately at the top of your <body> tag -->
+<div id="auditad-splash" class="splash-overlay">
+    <div class="splash-card">
+        <!-- App Icon -->
+        <div class="icon-container">
+            <span class="shield-emoji">🛡️</span>
+        </div>
+        
+        <!-- App Info -->
+        <h1 class="splash-title">AuditAD</h1>
+        <p class="splash-subtitle">Your Android Privacy Shield</p>
+        <p class="splash-description">Audit data supply lines, halt background scraping, and take control of your hidden Meta and Google ad preferences.</p>
+        
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <a href="https://calendly.com/yourblockster/30min" target="_blank" class="btn btn-primary">
+                📅 Book Feedback Session
+            </a>
+            <button onclick="dismissSplash()" class="btn btn-secondary">
+                Enter WebApp Live Test →
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Styling Tokens tailored to AuditAD's aesthetic -->
+<style>
+.splash-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: #0F172A; /* Deep Slate Gray */
+    display: flex; align-items: center; justify-content: center;
+    z-index: 99999; opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.splash-card {
+    text-align: center; max-width: 420px; padding: 2rem;
+    background: #1E293B; /* Dark Blue-Gray Surface */
+    border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.shield-emoji { font-size: 3.5rem; }
+.splash-title { color: #F8FAFC; margin-top: 1rem; margin-bottom: 0.25rem; font-size: 2rem; font-weight: 700; }
+.splash-subtitle { color: #10B981; font-weight: 600; margin-bottom: 1rem; } /* Shield Green */
+.splash-description { color: #94A3B8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; }
+.button-group { display: flex; flex-direction: column; gap: 0.75rem; }
+.btn {
+    padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: transform 0.1s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background-color: #0064E0; color: white; } /* Meta Classic Blue */
+.btn-secondary { background-color: transparent; color: #F8FAFC; border: 1px solid #94A3B8; }
+</style>
+
+<!-- Logic to dismiss overlay and enter the PWA site -->
+<script>
+function dismissSplash() {
+    const splash = document.getElementById('auditad-splash');
+    splash.style.opacity = '0';
+    setTimeout(() => {
+        splash.style.display = 'none';
+    }, 500); // Ensures smooth fade out animation
+}
+</script>

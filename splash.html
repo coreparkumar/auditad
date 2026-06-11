@@ -1,0 +1,226 @@
+<!-- Modal splash screen to present AuditAD before the main PWA app loads -->
+<div id="auditad-splash" class="splash-overlay" aria-hidden="false">
+  <div class="splash-card" role="dialog" aria-modal="true" aria-label="AuditAD welcome screen">
+    <div class="splash-glow"></div>
+
+    <div class="icon-shell" aria-hidden="true">
+      <span class="shield-mark">🛡️</span>
+    </div>
+
+    <p class="eyebrow">Privacy-first mobile audit workspace</p>
+    <h1 class="splash-title">AuditAD</h1>
+    <p class="splash-subtitle">See what your phone is exposing, then take control of the trackers and ad supply lines in one place.</p>
+
+    <ul class="feature-list">
+      <li>Live privacy and tracker guidance</li>
+      <li>Android-ready scan workflow</li>
+      <li>Fast PWA entry for quick testing</li>
+    </ul>
+
+    <p class="splash-description">
+      This opening modal gives your PWA a polished welcome experience and fades out seamlessly to reveal the main application.
+    </p>
+
+    <div class="button-group">
+      <a href="https://calendly.com/yourblockster/30min" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+        📅 Book a Calendly landing session
+      </a>
+      <button type="button" onclick="dismissSplash()" class="btn btn-secondary">
+        Open the PWA app →
+      </button>
+    </div>
+
+    <p class="microcopy">Tip: use the landing button to connect with the product page or demo flow.</p>
+  </div>
+</div>
+
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: linear-gradient(145deg, #020617 0%, #0f172a 45%, #111827 100%);
+    --panel: rgba(15, 23, 42, 0.96);
+    --border: rgba(148, 163, 184, 0.18);
+    --text: #eff6ff;
+    --muted: #cbd5e1;
+    --accent: #38bdf8;
+    --accent-2: #8b5cf6;
+    --success: #34d399;
+  }
+
+  .splash-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+      radial-gradient(circle at top, rgba(56, 189, 248, 0.08), transparent 28%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.98), rgba(15, 23, 42, 0.96));
+    backdrop-filter: blur(10px);
+    z-index: 99999;
+    opacity: 1;
+    transition: opacity 420ms ease;
+    font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .splash-card {
+    position: relative;
+    width: min(100%, 460px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 28px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 0.98));
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.45), 0 0 0 1px rgba(148, 163, 184, 0.04) inset;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .splash-glow {
+    position: absolute;
+    inset: auto -10% -35% -10%;
+    height: 140px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.12), transparent 55%);
+    filter: blur(18px);
+    pointer-events: none;
+  }
+
+  .icon-shell {
+    display: inline-grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(139, 92, 246, 0.16));
+    border: 1px solid rgba(56, 189, 248, 0.24);
+    box-shadow: 0 14px 32px rgba(56, 189, 248, 0.12);
+    margin-bottom: 12px;
+  }
+
+  .shield-mark {
+    font-size: 2rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .splash-title {
+    margin: 10px 0 6px;
+    color: var(--text);
+    font-size: 2rem;
+    line-height: 1.08;
+    font-weight: 800;
+  }
+
+  .splash-subtitle {
+    margin: 0 auto 14px;
+    max-width: 320px;
+    color: #dbeafe;
+    font-size: 0.98rem;
+    line-height: 1.45;
+  }
+
+  .feature-list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    padding: 0;
+    margin: 0 0 14px;
+    text-align: left;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .feature-list li::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: 700;
+  }
+
+  .splash-description {
+    margin: 0 0 18px;
+    color: #cbd5e1;
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 0.8rem 1rem;
+    border: 1px solid transparent;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 80ms ease, box-shadow 160ms ease, opacity 160ms ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, #0ea5e9, #6366f1);
+    box-shadow: 0 12px 28px rgba(56, 189, 248, 0.18);
+  }
+
+  .btn-secondary {
+    color: #eff6ff;
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(148, 163, 184, 0.24);
+  }
+
+  .microcopy {
+    margin-top: 10px;
+    color: #94a3b8;
+    font-size: 0.78rem;
+  }
+</style>
+
+<script>
+  function dismissSplash() {
+    const splash = document.getElementById('auditad-splash');
+    if (!splash) return;
+
+    splash.style.opacity = '0';
+    setTimeout(() => {
+      splash.style.display = 'none';
+    }, 420);
+  }
+
+  window.addEventListener('load', () => {
+    const splash = document.getElementById('auditad-splash');
+    if (splash) {
+      splash.classList.add('is-ready');
+    }
+  });
+</script>

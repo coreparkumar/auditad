@@ -6,7 +6,7 @@
 import React, { useState } from "react";
 import { AuditedApp, AuditResult } from "../types";
 import { FileCode2, ShieldAlert, CheckCircle, Search, AlertTriangle, ShieldCheck, Loader2, Sparkles, Send, Crosshair } from "lucide-react";
-import { registerPlugin } from "@capacitor/core";
+import { Capacitor, registerPlugin } from "@capacitor/core";
 
 interface AppCheckPlugin {
   isAppInstalled(options: { packageName: string }): Promise<{ installed: boolean }>;
@@ -155,6 +155,8 @@ const STAGING_MANIFESTS = {
 };
 
 export default function AppAuditor() {
+  const isNativeAndroid = Capacitor.getPlatform() === "android";
+
   const [apps, setApps] = useState<AuditedApp[]>(SIMULATED_APPS);
   const [selectedApp, setSelectedApp] = useState<AuditedApp>(SIMULATED_APPS[0]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -209,16 +211,20 @@ export default function AppAuditor() {
         }
       }
 
-      if (!scanner.getInstalledApps) {
+      if (!isNativeAndroid || !scanner.getInstalledApps) {
         const fallbackApps = SIMULATED_APPS.map((app) => ({
           ...app,
           id: `pwa-sample-${app.packageName}`,
-          description: `${app.description} (PWA preview scan; install the Android app for a live device scan).`,
+          description: `${app.description} (PWA preview catalog; install the Android app for a live device scan).`,
         }));
 
         setApps(fallbackApps);
         setSelectedApp(fallbackApps[0]);
-        setScanMessage("PWA mode is using sample phone data for this scan. Install the Android app for a live device inventory.");
+        setScanMessage(
+          isNativeAndroid
+            ? "The native Android app can read the device inventory. This browser session is using the PWA preview catalog instead."
+            : "This PWA website cannot read installed apps from the browser sandbox. The scan button uses a preview catalog here; install the Android app for a real phone scan."
+        );
         return;
       }
 
@@ -326,7 +332,7 @@ export default function AppAuditor() {
               disabled={isScanningPhone}
               className="px-2.5 py-1.5 rounded-md border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 dark:hover:bg-indigo-900/60 disabled:opacity-50"
             >
-              {isScanningPhone ? "Scanning..." : "Scan This Phone"}
+              {isScanningPhone ? "Scanning..." : isNativeAndroid ? "Scan This Phone" : "Scan Preview"}
             </button>
           </div>
 
@@ -343,6 +349,12 @@ export default function AppAuditor() {
 
           {scanMessage && (
             <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">{scanMessage}</p>
+          )}
+
+          {!isNativeAndroid && (
+            <p className="text-[10px] text-amber-600 dark:text-amber-300 leading-relaxed">
+              PWA mode cannot inspect installed apps directly in the browser. Use the Android build for a live device scan.
+            </p>
           )}
 
           <div className="space-y-2 h-[410px] overflow-y-auto pr-1">
