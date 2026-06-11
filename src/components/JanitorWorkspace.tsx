@@ -55,14 +55,15 @@ const JANITOR_TASKS: JanitorTask[] = [
     id: "m-offsite",
     title: "Off-Meta Historical Indexes",
     category: "Meta",
-    description: "Off-Facebook Activity shows websites and apps that send information about your activity to Meta. Clear your history and disable future tracking from third-party integrations.",
+    description: "Meta receives data from other apps and websites via Pixel, Conversions API, and other tracking tools. Your activity off Meta technologies shows this data collection and allows you to disconnect it from your account.",
     canonicalUrl: "https://www.facebook.com/off_facebook_activity",
-    actionVector: "Clear and disable off-Meta activity tracking.",
+    actionVector: "Decouple your account from third-party tracking data.",
     steps: [
-      "Open Off-Facebook Activity page from your Facebook account.",
-      "Review the list of apps and websites sending data to Meta about your activity.",
-      "Click 'Clear All Activity' to remove your connection history.",
-      "Toggle 'Off-Facebook Activity' setting to control future tracking."
+      "Go to Meta Accounts Center > Your information and permissions > Your activity off Meta technologies.",
+      "Click 'Clear previous activity' to disconnect all past data Meta collected about you from other sites.",
+      "Confirm the action (data decouples from your account but may remain stored anonymously on Meta's servers).",
+      "Then click 'Manage future activity' and select 'Disconnect future activity' to stop new tracking.",
+      "Important: This stops Meta from associating data with your account, but sites still send data to Meta—it's just stored anonymously."
     ]
   }
 ];
