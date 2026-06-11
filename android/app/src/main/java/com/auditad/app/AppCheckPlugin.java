@@ -1,15 +1,20 @@
 package com.auditad.app;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+
+import java.util.List;
 
 @CapacitorPlugin(name = "AppCheck")
 public class AppCheckPlugin extends Plugin {
@@ -61,6 +66,39 @@ public class AppCheckPlugin extends Plugin {
             call.resolve();
         } catch (Exception e) {
             call.reject("Could not open DNS settings: " + e.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void getInstalledApps(PluginCall call) {
+        try {
+            Context context = getContext();
+            PackageManager pm = context.getPackageManager();
+            List<ApplicationInfo> apps = pm.getInstalledApplications(PackageManager.MATCH_DEFAULT_ONLY);
+
+            JSArray items = new JSArray();
+
+            for (ApplicationInfo appInfo : apps) {
+                try {
+                    PackageInfo packageInfo = pm.getPackageInfo(appInfo.packageName, 0);
+                    JSObject item = new JSObject();
+                    item.put("name", pm.getApplicationLabel(appInfo).toString());
+                    item.put("packageName", appInfo.packageName);
+                    item.put("versionName", packageInfo.versionName != null ? packageInfo.versionName : "");
+                    item.put("versionCode", packageInfo.versionCode);
+                    item.put("targetSdk", appInfo.targetSdkVersion);
+                    item.put("isSystemApp", (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+                    items.put(item);
+                } catch (PackageManager.NameNotFoundException ignored) {
+                    // Skip broken entries.
+                }
+            }
+
+            JSObject ret = new JSObject();
+            ret.put("apps", items);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject("Could not scan installed applications: " + e.getMessage());
         }
     }
 
