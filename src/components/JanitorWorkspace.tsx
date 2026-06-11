@@ -41,26 +41,28 @@ const JANITOR_TASKS: JanitorTask[] = [
     id: "m-center",
     title: "Meta Corporate Tracking Rights",
     category: "Meta",
-    description: "Facebook cross-app profiles track devices using embedded Software Development Kits (SDKs) in random utility and gaming apps.",
-    canonicalUrl: "https://accountscenter.meta.com/ads_interests",
-    actionVector: "Revoke corporate profiling tags.",
+    description: "Meta Accounts Center is where you manage Facebook, Instagram, WhatsApp, and Meta accounts in one place. Control ad topics and data used for personalized ads across all Meta services.",
+    canonicalUrl: "https://accountscenter.meta.com",
+    actionVector: "Control ad preferences across all Meta services.",
     steps: [
-      "Wait for Meta Accounts Center to load inside browser.",
-      "Go to 'Ad Settings' -> 'Ad topics' or 'Data about your activity'.",
-      "Choose to 'Revoke tracking licenses' for third-party domains."
+      "Go to accountscenter.meta.com and log in with your Meta account.",
+      "Navigate to 'Ad preferences' in the sidebar.",
+      "Review 'Ad topics' and 'Data about your activity' to see how your profile is being used.",
+      "Toggle off ad topics and settings you want to opt out of."
     ]
   },
   {
     id: "m-offsite",
     title: "Off-Meta Historical Indexes",
     category: "Meta",
-    description: "Third-party sites send 'Pixel activity events' mapping your page visits directly to Meta's servers.",
+    description: "Off-Facebook Activity shows websites and apps that send information about your activity to Meta. Clear your history and disable future tracking from third-party integrations.",
     canonicalUrl: "https://www.facebook.com/off_facebook_activity",
-    actionVector: "Clear tracking indexes.",
+    actionVector: "Clear and disable off-Meta activity tracking.",
     steps: [
-      "Open Off-Facebook Activity page in custom browser view.",
-      "Click 'Clear Previous Activity' under managing options.",
-      "Deactivate 'Future Off-Facebook Activity' to block subsequent tracking."
+      "Open Off-Facebook Activity page from your Facebook account.",
+      "Review the list of apps and websites sending data to Meta about your activity.",
+      "Click 'Clear All Activity' to remove your connection history.",
+      "Toggle 'Off-Facebook Activity' setting to control future tracking."
     ]
   }
 ];
