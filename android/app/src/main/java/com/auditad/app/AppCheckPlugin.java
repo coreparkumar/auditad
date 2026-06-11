@@ -70,6 +70,33 @@ public class AppCheckPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void requestScanPermission(PluginCall call) {
+        JSObject ret = new JSObject();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                intent.setData(uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+
+                ret.put("granted", false);
+                ret.put("needsSettings", true);
+                ret.put("explanation", "Android 11+ needs package visibility access for a full phone scan. Enable the permission in Settings, then tap Scan This Phone again.");
+                call.resolve(ret);
+            } catch (Exception e) {
+                call.reject("Could not open Android permission settings: " + e.getMessage());
+            }
+            return;
+        }
+
+        ret.put("granted", true);
+        ret.put("needsSettings", false);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
     public void getInstalledApps(PluginCall call) {
         try {
             Context context = getContext();

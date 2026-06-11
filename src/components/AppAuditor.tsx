@@ -11,6 +11,11 @@ import { registerPlugin } from "@capacitor/core";
 interface AppCheckPlugin {
   isAppInstalled(options: { packageName: string }): Promise<{ installed: boolean }>;
   openAppSettings(options: { packageName: string }): Promise<void>;
+  requestScanPermission?: () => Promise<{
+    granted?: boolean;
+    needsSettings?: boolean;
+    explanation?: string;
+  }>;
   getInstalledApps?: () => Promise<{
     apps: Array<{
       name: string;
@@ -195,8 +200,26 @@ export default function AppAuditor() {
 
     try {
       const scanner = AppCheck as AppCheckPlugin;
+
+      if (scanner.requestScanPermission) {
+        const permissionState = await scanner.requestScanPermission();
+        if (permissionState?.needsSettings) {
+          setScanMessage(permissionState.explanation || "Enable package visibility access on Android to scan installed apps, then tap Scan Phone again.");
+          return;
+        }
+      }
+
       if (!scanner.getInstalledApps) {
-        throw new Error("Phone scan is available in the Android native build. The current web session will use sample data.");
+        const fallbackApps = SIMULATED_APPS.map((app) => ({
+          ...app,
+          id: `pwa-sample-${app.packageName}`,
+          description: `${app.description} (PWA preview scan; install the Android app for a live device scan).`,
+        }));
+
+        setApps(fallbackApps);
+        setSelectedApp(fallbackApps[0]);
+        setScanMessage("PWA mode is using sample phone data for this scan. Install the Android app for a live device inventory.");
+        return;
       }
 
       const result = await scanner.getInstalledApps();
@@ -303,7 +326,7 @@ export default function AppAuditor() {
               disabled={isScanningPhone}
               className="px-2.5 py-1.5 rounded-md border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 dark:hover:bg-indigo-900/60 disabled:opacity-50"
             >
-              {isScanningPhone ? "Scanning..." : "Scan Phone"}
+              {isScanningPhone ? "Scanning..." : "Scan This Phone"}
             </button>
           </div>
 
