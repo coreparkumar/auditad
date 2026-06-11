@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { JanitorTask } from "../types";
-import { ShieldCheck, ArrowRight, ExternalLink, Smartphone, MessageSquare, Info, Star, ChevronRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, ArrowRight, ExternalLink, Smartphone, MessageSquare, Info, Star, AlertCircle, CheckCircle2 } from "lucide-react";
 
 const JANITOR_TASKS: JanitorTask[] = [
   {
