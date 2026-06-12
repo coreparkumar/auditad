@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.auditad.app"
+    namespace "com.auditad.app.vercel"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.auditad.app"
+        applicationId "com.auditad.app.vercel"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,31 +16,47 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    buildTypes {
-        signingConfigs {
-            release {
-                def keystorePropertiesFile = rootProject.file('key.properties')
-                if (keystorePropertiesFile.exists()) {
-                    def keystoreProperties = new Properties()
-                    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-                    storeFile file(keystoreProperties['storeFile'])
-                    storePassword keystoreProperties['storePassword']
-                    keyAlias keystoreProperties['keyAlias']
-                    keyPassword keystoreProperties['keyPassword']
-                } else if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-                    storeFile file(project.property('MYAPP_RELEASE_STORE_FILE'))
-                    storePassword project.property('MYAPP_RELEASE_STORE_PASSWORD')
-                    keyAlias project.property('MYAPP_RELEASE_KEY_ALIAS')
-                    keyPassword project.property('MYAPP_RELEASE_KEY_PASSWORD')
-                } else {
-                    println "WARNING: No keystore configuration found. Release builds will be unsigned."
+    signingConfigs {
+        release {
+            def keystorePropertiesFile = rootProject.file('key.properties')
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                
+                def storePass = keystoreProperties['storePassword'] ?: keystoreProperties['MYAPP_RELEASE_STORE_PASSWORD']
+                
+                // Support both conventional keys (storeFile/storePassword/keyAlias/keyPassword)
+                // and older MYAPP_* keys that some templates use.
+                def storeFilePath = keystoreProperties['storeFile'] ?: keystoreProperties['MYAPP_RELEASE_STORE_FILE'] ?: keystoreProperties['MYAPP_RELEASE_STORE_FILE']
+                if (storeFilePath != null && storeFilePath.toString().trim()) {
+                    storeFile file(storeFilePath.toString())
                 }
+                if (storePass) {
+                    storePassword storePass
+                }
+                def alias = keystoreProperties['keyAlias'] ?: keystoreProperties['MYAPP_RELEASE_KEY_ALIAS']
+                if (alias) {
+                    keyAlias alias
+                }
+                def keyPass = keystoreProperties['keyPassword'] ?: keystoreProperties['MYAPP_RELEASE_KEY_PASSWORD']
+                if (keyPass) {
+                    keyPassword keyPass
+                }
+            } else if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(project.property('MYAPP_RELEASE_STORE_FILE'))
+                storePassword project.property('MYAPP_RELEASE_STORE_PASSWORD')
+                keyAlias project.property('MYAPP_RELEASE_KEY_ALIAS')
+                keyPassword project.property('MYAPP_RELEASE_KEY_PASSWORD')
+            } else {
+                println "WARNING: No keystore configuration found. Release builds will be unsigned."
             }
         }
+    }
 
+    buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (signingConfigs?.release?.storeFile != null) {
                 signingConfig signingConfigs.release
             }

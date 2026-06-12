@@ -89,7 +89,7 @@ export default function App() {
       {activeTab === "diagnostics" && (
         <div className="space-y-8">
           <a
-            href="https://play.google.com/apps/internaltest/4700902630438787188"
+            href="https://play.google.com/apps/internaltest/4701202635701444898"
             target="_blank"
             rel="noopener noreferrer"
             className="block rounded-[1.5rem] border border-indigo-200 dark:border-indigo-900/60 bg-gradient-to-r from-indigo-50 via-white to-slate-50 dark:from-indigo-950/30 dark:via-slate-950 dark:to-slate-950 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"

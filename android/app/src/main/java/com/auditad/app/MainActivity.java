@@ -1,4 +1,4 @@
-package com.auditad.app;
+package com.auditad.app.vercel;
 
 import com.getcapacitor.BridgeActivity;
 
