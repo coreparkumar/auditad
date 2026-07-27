@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f172a" />
     <meta name="description" content="AuditAd is a privacy dashboard with DNS, audit, and tracker-visualization workflows." />
+    
+    <!-- Force automated verification engines and emulators to upgrade requests to HTTPS -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AuditAd" />
@@ -213,7 +217,7 @@
           <a href="https://calendly.com/yourblockster/30min" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
             📅 Book a Calendly session to discuss mobile safety.
           </a>
-          <button type="button" onclick="dismissSplash()" class="btn btn-secondary">
+          <button id="dismiss-btn" type="button" onclick="dismissSplash()" class="btn btn-secondary">
             Open the PWA app →
           </button>
         </div>
@@ -239,6 +243,13 @@
         const splash = document.getElementById('auditad-splash');
         if (splash) {
           splash.classList.add('is-ready');
+          
+          <!-- Automated fail-safe to clear splash in headless emulators/sandboxes -->
+          setTimeout(() => {
+            if (splash.style.display !== 'none') {
+              dismissSplash();
+            }
+          }, 3000);
         }
       });
     </script>

@@ -13,4 +13,9 @@ ext {
     androidxJunitVersion = '1.1.5'
     androidxEspressoCoreVersion = '3.5.1'
     cordovaAndroidVersion = '10.1.1'
+    kotlinVersion = '1.9.23'
+    roomVersion = '2.6.1'
+    kspVersion = '1.9.23-1.0.19'
+    composeVersion = '1.6.3'
+    composeMaterial3Version = '1.2.1'
 }

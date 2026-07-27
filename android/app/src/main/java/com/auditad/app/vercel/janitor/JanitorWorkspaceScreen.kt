@@ -1,5 +1,6 @@
 package com.auditad.app.vercel.janitor
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,10 +24,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 // Slate Cyberpunk Dark Theme Colors
-val SlateDarkBackground = Color(0x0B0E14)
-val SlateCardSurface = Color(0x161B22)
-val CyberpunkGreen = Color(0x10B981)
-val LogContainerDark = Color(0x0D1117)
+val SlateDarkBackground = Color(0xFF0B0E14)
+val SlateCardSurface = Color(0xFF161B22)
+val CyberpunkGreen = Color(0xFF10B981)
+val LogContainerDark = Color(0xFF0D1117)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -156,7 +157,7 @@ fun GaidWorkspace(adId: String, isResetting: Boolean, onResetClick: () -> Unit) 
                 shape = RoundedCornerShape(8.dp)
             ) {
                 if (isResetting) {
-                    CircularProgressIndicator(size = 20.dp, color = Color.Black, strokeWidth = 2.dp)
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.Black, strokeWidth = 2.dp)
                     Spacer(Modifier.width(8.dp))
                     Text("GENERATING FRESH TOKEN...", fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 } else {

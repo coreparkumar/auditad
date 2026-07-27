@@ -5,7 +5,8 @@
 
 import React, { useState, useEffect } from "react";
 import { JanitorTask } from "../types";
-import { ShieldCheck, ArrowRight, ExternalLink, Smartphone, MessageSquare, Info, Star, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, ArrowRight, ExternalLink, Smartphone, MessageSquare, Info, Star, AlertCircle, CheckCircle2, LayoutGrid } from "lucide-react";
+import { Capacitor } from '@capacitor/core';
 
 const JANITOR_TASKS: JanitorTask[] = [
   {
@@ -117,6 +118,19 @@ export default function JanitorWorkspace() {
       setIsResettingAdId(false);
       handleRecordReset();
     }, 1200);
+  };
+
+  const handleOpenNativeJanitor = async () => {
+    if (Capacitor.isNativePlatform()) {
+      try {
+        // @ts-ignore
+        await Capacitor.Plugins.Janitor.openJanitorWorkspace();
+      } catch (e) {
+        console.error("Native Janitor Plugin error", e);
+      }
+    } else {
+      alert("Native Janitor Workspace is only available on the Android app.");
+    }
   };
 
   const handleLaunchTask = (task: JanitorTask) => {
@@ -274,6 +288,26 @@ export default function JanitorWorkspace() {
           </button>
         </div>
       )}
+
+      {/* Native Workspace Entry */}
+      <div className="p-6 bg-slate-900 border border-emerald-500/30 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_0_20px_rgba(16,185,129,0.1)] animate-in fade-in zoom-in-95">
+        <div className="flex items-center space-x-4">
+          <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+            <LayoutGrid className="h-6 w-6 text-emerald-400" />
+          </div>
+          <div>
+            <p className="text-lg font-black text-white leading-none tracking-tight">Access Native Janitor Hub</p>
+            <p className="text-sm text-slate-400 mt-1.5 font-medium">Switch to the high-fidelity Compose workspace with local database logging.</p>
+          </div>
+        </div>
+        <button
+          onClick={handleOpenNativeJanitor}
+          className="px-6 py-3 bg-emerald-600 text-white text-xs font-black rounded-2xl hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-500/20 shrink-0 active:scale-95 uppercase tracking-widest border border-emerald-400/30 flex items-center gap-2"
+        >
+          <span>Launch Hub</span>
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
 
       {/* Advertising ID Reset Panel */}
       <div className="bg-gradient-to-br from-slate-900/30 to-slate-800/20 dark:from-slate-900 dark:to-slate-950 border border-slate-700/40 dark:border-slate-800 rounded-2xl p-6 shadow-lg">

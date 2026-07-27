@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
+import androidx.core.content.pm.PackageInfoCompat; // Added for backwards-compatible version code evaluation
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -56,8 +57,7 @@ public class AppCheckPlugin extends Plugin {
     @PluginMethod
     public void openPrivateDnsSettings(PluginCall call) {
         try {
-            Intent intent = new Intent("android.settings.VPN_SETTINGS"); // Fallback for VPN/DNS area
-            // On Android 9+, this is more specific:
+            Intent intent = new Intent("android.settings.VPN_SETTINGS"); 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                 intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
             }
@@ -101,18 +101,34 @@ public class AppCheckPlugin extends Plugin {
         try {
             Context context = getContext();
             PackageManager pm = context.getPackageManager();
-            List<ApplicationInfo> apps = pm.getInstalledApplications(PackageManager.MATCH_DEFAULT_ONLY);
+            
+            // Modern API 33+ safe check for package fetching
+            List<ApplicationInfo> apps;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                apps = pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+            } else {
+                apps = pm.getInstalledApplications(PackageManager.MATCH_DEFAULT_ONLY);
+            }
 
             JSArray items = new JSArray();
 
             for (ApplicationInfo appInfo : apps) {
                 try {
-                    PackageInfo packageInfo = pm.getPackageInfo(appInfo.packageName, 0);
+                    PackageInfo packageInfo;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                        packageInfo = pm.getPackageInfo(appInfo.packageName, PackageManager.PackageInfoFlags.of(0));
+                    } else {
+                        packageInfo = pm.getPackageInfo(appInfo.packageName, 0);
+                    }
+
+                    // Use AndroidX PackageInfoCompat to safely fetch long version codes without deprecation warnings
+                    long longVersionCode = PackageInfoCompat.getLongVersionCode(packageInfo);
+
                     JSObject item = new JSObject();
                     item.put("name", pm.getApplicationLabel(appInfo).toString());
                     item.put("packageName", appInfo.packageName);
                     item.put("versionName", packageInfo.versionName != null ? packageInfo.versionName : "");
-                    item.put("versionCode", packageInfo.versionCode);
+                    item.put("versionCode", longVersionCode); // Replaced old field accessor
                     item.put("targetSdk", appInfo.targetSdkVersion);
                     item.put("isSystemApp", (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
                     items.put(item);
@@ -131,15 +147,16 @@ public class AppCheckPlugin extends Plugin {
 
     private boolean isAppReallyInstalled(String packageName, Context context) {
         try {
-            // MATCH_DEFAULT_ONLY ensures we don't accidentally pull ghost metadata
             PackageManager pm = context.getPackageManager();
-            pm.getPackageInfo(packageName, PackageManager.MATCH_DEFAULT_ONLY);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                pm.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+            } else {
+                pm.getPackageInfo(packageName, PackageManager.MATCH_DEFAULT_ONLY);
+            }
             return true;
         } catch (PackageManager.NameNotFoundException e) {
-            // The OS kernel guarantees the app is completely dead
             return false;
         } catch (SecurityException e) {
-            // App exists but is walled off inside a secure workspace container
             return true;
         }
     }

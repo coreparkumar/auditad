@@ -4,17 +4,34 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.auditad.app",
+  "applicationId": "com.auditad.app.vercel",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0",
-      "outputFile": "AdShield-v1.0-b1.apk"
+      "versionCode": 3,
+      "versionName": "1.2",
+      "outputFile": "AdShield-v1.2-b3.apk"
     }
   ],
-  "elementType": "File"
+  "elementType": "File",
+  "baselineProfiles": [
+    {
+      "minApi": 28,
+      "maxApi": 30,
+      "baselineProfiles": [
+        "baselineProfiles/1/AdShield-v1.2-b3.dm"
+      ]
+    },
+    {
+      "minApi": 31,
+      "maxApi": 2147483647,
+      "baselineProfiles": [
+        "baselineProfiles/0/AdShield-v1.2-b3.dm"
+      ]
+    }
+  ],
+  "minSdkVersionForDexing": 22
 }
